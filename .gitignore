@@ -1,0 +1,16 @@
+.DS_Store
+Cargo.lock
+
+/target
+
+static/*.wasm
+static/*.d.ts
+static/wasm.js
+static/package.json
+
+
+# Added by cargo
+#
+# already existing elements were commented out
+
+#/target
