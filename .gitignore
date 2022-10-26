@@ -1,14 +1,11 @@
 .DS_Store
-Cargo.lock
 
-/target
+**/node_modules
+**/.env
+**/target
+**/dist
 
-static/*.wasm
-static/*.d.ts
-static/wasm.js
-static/package.json
-
-
+**/Cargo.lock
 # Added by cargo
 #
 # already existing elements were commented out
