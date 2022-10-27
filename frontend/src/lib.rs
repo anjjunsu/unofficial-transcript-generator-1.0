@@ -2,7 +2,7 @@ mod components;
 mod pages;
 mod router;
 
-use components::organisms::navbar::Navbar;
+use components::organisms::{footer::Footer, navbar::Navbar};
 use router::{switch, Route};
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -14,6 +14,7 @@ pub fn app() -> Html {
             <BrowserRouter>
                 <Navbar />
                 <Switch<Route> render={Switch::render(switch)} />
+                <Footer />
             </BrowserRouter>
         </>
     }
