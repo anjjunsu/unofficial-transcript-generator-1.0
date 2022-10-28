@@ -1,0 +1,36 @@
+# Triggered when push to `main` branch
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy_page:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greeting
+        uses: echo Hey There
+
+      - name: Cehckout sources
+        uses: actions/checkout@v3
+
+      - name: Install rust toolchain latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+      
+      - name: Install cargo trunk
+        uses: baptiste0928/cargo-install@v1
+        with:
+          crate: cargo-trunk
+
+      - name: Delete `docs` directory if exists
+        uses: rm -rf ./docs
+      
+      - name: Make `docs` directory
+        uses: mkdir docs
+
+      - name: Merge to the github
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with: commit_message: Automated change by my action bot
+
