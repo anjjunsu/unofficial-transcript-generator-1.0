@@ -15,8 +15,8 @@ pub fn my_link(props: &Props) -> Html {
     let ss = style!(
         r#"
             font-size: 22px;
-            color: #FFFFFF;    
             text-decoration: none;
+            color: #FFFFFF;    
         "#
     )
     .expect("Failed to mount style sheet for my link");
