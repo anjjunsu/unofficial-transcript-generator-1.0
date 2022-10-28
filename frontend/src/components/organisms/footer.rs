@@ -18,7 +18,7 @@ pub fn footer() -> Html {
                 padding: 10px 15px;
                 background-color: rgba(51, 126, 169, 1);
                 display: flex;
-                justify-content: space-between;
+                justify-content: space-around;
             }
 
             a {
