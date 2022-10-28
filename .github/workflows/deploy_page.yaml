@@ -18,7 +18,7 @@ jobs:
         with:
           toolchain: nightly
           override: true
-      
+
       - name: Install cargo trunk
         uses: baptiste0928/cargo-install@v1
         with:
@@ -26,11 +26,11 @@ jobs:
 
       - name: Delete `docs` directory if exists
         uses: rm -rf ./docs
-      
+
       - name: Make `docs` directory
         uses: mkdir docs
 
       - name: Merge to the github
         uses: stefanzweifel/git-auto-commit-action@v4
-        with: commit_message: Automated change by my action bot
-
+        with:
+          commit_message: Automated change by my action bot
