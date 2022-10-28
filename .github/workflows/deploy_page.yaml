@@ -22,7 +22,7 @@ jobs:
       - name: Install cargo trunk
         uses: baptiste0928/cargo-install@v1
         with:
-          crate: cargo-trunk
+          crate: trunk
 
       - name: Delete `docs` directory if exists
         run: rm -rf ./docs
