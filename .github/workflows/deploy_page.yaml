@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Greeting
-        uses: echo Hey There
+        run: echo Hey There
 
       - name: Cehckout sources
         uses: actions/checkout@v3
@@ -25,10 +25,10 @@ jobs:
           crate: cargo-trunk
 
       - name: Delete `docs` directory if exists
-        uses: rm -rf ./docs
+        run: rm -rf ./docs
 
       - name: Make `docs` directory
-        uses: mkdir docs
+        run: mkdir docs
 
       - name: Merge to the github
         uses: stefanzweifel/git-auto-commit-action@v4
