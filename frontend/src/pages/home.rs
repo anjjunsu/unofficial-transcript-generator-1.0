@@ -1,5 +1,5 @@
 use crate::components::atoms::page_btn::PageBtn;
-use crate::components::modelcules::my_form::MyForm;
+use crate::components::modelcules::file_form::FileForm;
 use crate::router::Route;
 use stylist::style;
 use yew::prelude::*;
@@ -66,7 +66,7 @@ pub fn home() -> Html {
                     <h2>{"And also make it look nice"}</h2>
                     <h2>{"So that reader can understand what you actually studied instead of some random abbreviation🫡"}</h2>
                     <PageBtn label="User Guide" route={Route::Guide} />
-                    <MyForm />
+                    <FileForm />
                 </div>
             </div>
         </div>

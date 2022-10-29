@@ -20,6 +20,7 @@ pub fn page_btn(props: &Props) -> Html {
             padding: 15px;
             margin: 10px;
             border-color: white;
+            border-radius: 15px;
         "#
     }
     .expect("Failed to mount style sheet for page button");

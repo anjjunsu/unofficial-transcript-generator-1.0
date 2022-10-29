@@ -24,11 +24,25 @@ jobs:
         with:
           crate: trunk
 
+      - name: Add `wasm32-unknown-unknown` build target
+        run: rustup target add wasm32-unknown-unknown
+
+      - name: Install wasm-bindgen-cli
+        uses: baptiste0928/cargo-install@v1
+        with:
+          crate: wasm-bindgen-cli
+
       - name: Delete `docs` directory if exists
         run: rm -rf ./docs
 
       - name: Make `docs` directory
         run: mkdir docs
+
+      - name: Display current directory
+        run: pwd
+
+      - name: List all files in current directory
+        run: ls -al
 
       - name: Merge to the github
         uses: stefanzweifel/git-auto-commit-action@v4
