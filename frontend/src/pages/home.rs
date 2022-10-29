@@ -1,7 +1,8 @@
+use crate::components::atoms::page_btn::PageBtn;
+use crate::components::modelcules::my_form::MyForm;
+use crate::router::Route;
 use stylist::style;
 use yew::prelude::*;
-
-use crate::components::modelcules::my_form::MyForm;
 
 // TODO: How to make button properly
 #[function_component(Home)]
@@ -64,9 +65,7 @@ pub fn home() -> Html {
                     <h2>{"This generator will add full course name to your transcript"}</h2>
                     <h2>{"And also make it look nice"}</h2>
                     <h2>{"So that reader can understand what you actually studied instead of some random abbreviation🫡"}</h2>
-                    <a href={"/guide"}>
-                        <span class={"guide_btn"}>{"Guide"}</span>
-                    </a>
+                    <PageBtn label="User Guide" route={Route::Guide} />
                     <MyForm />
                 </div>
             </div>
