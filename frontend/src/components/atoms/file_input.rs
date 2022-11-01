@@ -1,40 +1,32 @@
 use wasm_bindgen::JsCast;
-use web_sys::{EventTarget, HtmlInputElement, Url};
+use web_sys::{File, HtmlInputElement};
 use yew::prelude::*;
-use yew::{events::Event, html};
-
-use gloo::console::log;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
     pub name: String,
+    pub handle_onchange: Callback<File>,
 }
 
 #[function_component(FileInput)]
 pub fn file_input(props: &Props) -> Html {
-    let on_change = Callback::from(|event: Event| {
-        log!("Starting on change");
+    let handle_onchange = props.handle_onchange.clone();
 
-        event.prevent_default();
-
-        let target: EventTarget = event
+    let onchange = Callback::from(move |event: Event| {
+        let value = event
             .target()
-            .expect("Event should have a target when dispatched");
-
-        let files = target
+            .unwrap()
             .unchecked_into::<HtmlInputElement>()
             .files()
-            .expect("Failed to read file");
+            .unwrap()
+            .get(0)
+            .unwrap();
 
-        // let file = files.item(0).expect("Failed to get file from file list");
-
-        // let content = file.stream();
-        // log!(content);
+        handle_onchange.emit(value);
     });
-
     html! {
         <input
-            onchange={on_change}
+            onchange={onchange}
             type="file"
             name={props.name.clone()} />
     }
