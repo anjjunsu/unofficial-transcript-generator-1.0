@@ -21,7 +21,7 @@ jobs:
         run: rm -rf ./docs
 
       - name: Go to frontend directory
-        run: cd frontend
+        run: cd ./frontend
 
       - name: Display current directory
         run: pwd
