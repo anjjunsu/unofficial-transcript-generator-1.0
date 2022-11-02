@@ -16,6 +16,11 @@ jobs:
 
       - name: Set up node.js
         uses: actions/setup-node@v3
+        with:
+          cache: "npm"
+
+      - name: npm install
+        run: npm install
 
       - name: Delete `docs` directory if exists
         run: rm -rf ./docs
