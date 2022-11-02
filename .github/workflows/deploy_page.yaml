@@ -6,37 +6,40 @@ on:
 jobs:
   deploy_page:
     runs-on: ubuntu-latest
+
     steps:
       - name: Greeting
         run: echo Hey There
 
-      - name: Cehckout sources
+      - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Install rust toolchain latest nightly
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          override: true
-
-      - name: Install cargo trunk
-        uses: baptiste0928/cargo-install@v1
-        with:
-          crate: trunk
-
-      - name: Add `wasm32-unknown-unknown` build target
-        run: rustup target add wasm32-unknown-unknown
-
-      - name: Install wasm-bindgen-cli
-        uses: baptiste0928/cargo-install@v1
-        with:
-          crate: wasm-bindgen-cli
+      - name: Set up node.js
+        uses: actions/setup-node@v3
 
       - name: Delete `docs` directory if exists
         run: rm -rf ./docs
 
-      - name: Make `docs` directory
-        run: mkdir docs
+      - name: Go to frontend directory
+        run: cd frontend
+
+      - name: Display current directory
+        run: pwd
+
+      - name: List current directory
+        run: ls -al
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Display current directory
+        run: pwd
+
+      - name: List all files in current directory
+        run: ls -al
+
+      - name: Move dist files to root and rename it to docs directory
+        run: mv ./build ../docs
 
       - name: Display current directory
         run: pwd

@@ -1,1 +1,3 @@
-# ...
+# Unofficial Transcript Generator
+
+## Why?
