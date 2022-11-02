@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/unofficial-transcript-generator/docs/static/css/main.ded73083.css",
+    "main.js": "/unofficial-transcript-generator/docs/static/js/main.02fffef7.js",
+    "index.html": "/unofficial-transcript-generator/docs/index.html",
+    "main.ded73083.css.map": "/unofficial-transcript-generator/docs/static/css/main.ded73083.css.map",
+    "main.02fffef7.js.map": "/unofficial-transcript-generator/docs/static/js/main.02fffef7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ded73083.css",
+    "static/js/main.02fffef7.js"
+  ]
+}
