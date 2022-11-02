@@ -20,6 +20,7 @@ jobs:
           cache: "npm"
 
       - name: npm install
+        working-directory: ./frontend
         run: npm install
 
       - name: Delete `docs` directory if exists
