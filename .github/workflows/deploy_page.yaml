@@ -20,9 +20,6 @@ jobs:
       - name: Delete `docs` directory if exists
         run: rm -rf ./docs
 
-      - name: Go to frontend directory
-        run: cd ./frontend
-
       - name: Display current directory
         run: pwd
 
@@ -30,16 +27,11 @@ jobs:
         run: ls -al
 
       - name: Build React app
+        working-directory: ./frontend
         run: npm run build
 
-      - name: Display current directory
-        run: pwd
-
-      - name: List all files in current directory
-        run: ls -al
-
       - name: Move dist files to root and rename it to docs directory
-        run: mv ./build ../docs
+        run: mv ./frontend/build ./docs
 
       - name: Display current directory
         run: pwd
