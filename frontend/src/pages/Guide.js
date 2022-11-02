@@ -1,10 +1,12 @@
 import React from "react";
+import PageLinkBtn from "components/PageLinkBtn";
 
 const Guide = () => {
   return (
-    <div>
+    <section>
       <h1>Guide</h1>
-    </div>
+      <PageLinkBtn pageName="Home" pageLink="/" />
+    </section>
   );
 };
 

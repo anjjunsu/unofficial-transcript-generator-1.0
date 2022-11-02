@@ -1,0 +1,12 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0rem;
+  padding: 0rem;
+  margin: 0rem;
+}
+.home h1 {
+  font-size: 2.5rem;
+}
