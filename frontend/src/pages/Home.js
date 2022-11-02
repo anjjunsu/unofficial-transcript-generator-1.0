@@ -1,8 +1,11 @@
 import React from "react";
 import PageLinkBtn from "components/PageLinkBtn";
+import FileDropZone from "components/FileDropZone";
 import "pages/pageStyles.css";
 
 const Home = () => {
+  const [files, setFiles] = React.useState(null);
+
   return (
     <section className="home">
       <h1>Unofficial Transcript Generator</h1>
@@ -16,6 +19,7 @@ const Home = () => {
         random abbreviation🫡
       </h3>
       <PageLinkBtn pageName="User Guide" pageLink="/guide" />
+      <FileDropZone />
     </section>
   );
 };
