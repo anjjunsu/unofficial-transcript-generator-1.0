@@ -23,3 +23,12 @@
 **/yarn-error.log*
 
 # Backend
+
+# Python venv
+/backend/bin
+/backend/lib
+/backend/include
+/backend/pyvenv.cfg
+
+# pycache
+/backend/src/__pycache__
