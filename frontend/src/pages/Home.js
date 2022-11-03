@@ -4,42 +4,36 @@ import FileDropZone from "components/FileDropZone";
 import "pages/pageStyles.css";
 
 const Home = () => {
-  const url = "http://localhost:8000";
+  const url = "http://localhost:8000/upload/file";
   const [file, setFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
 
-  const handleFileSubmission = (event) => {
+  const handleFileSubmission = async (event) => {
     const formData = new FormData();
 
-    formData.append("File", file);
-
-    fetch(url, {
+    formData.append("file", file);
+    formData.append("type", "application/pdf");
+    const response = await fetch(url, {
       method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       body: formData,
-    })
-      .then((response) => {
-        console.dir("response");
-        console.dir(response.json());
-      })
-      .then((result) => {
-        console.dir("result");
-        console.dir(result);
-      });
+    }).then((result) => {
+      console.dir("result");
+      console.dir(result);
+    });
+    console.log(response);
   };
 
   const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.map((file) => {
-      const reader = new FileReader();
+    const file = acceptedFiles[0];
+    console.dir(file);
+    setFile(file);
+    setIsFilePicked(true);
 
-      reader.onload = function (e) {
-        setFile(e.target.result);
-        console.dir(file);
-        setIsFilePicked(true);
-      };
-
-      reader.readAsDataURL(file);
-      return file;
-    });
+    return file;
   }, []);
 
   return (

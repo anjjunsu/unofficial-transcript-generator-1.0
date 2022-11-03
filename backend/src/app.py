@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -16,11 +16,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 @app.get("/")
 def home():
     return {"message": "Hello World"}
 
-@app.post("/")
-def um():
-    return {"hi hi good post man"}
+@app.post("/upload/file")
+async def get_data(file: UploadFile = File(...)):
+    return { "file_name": file.filename }
