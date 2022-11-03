@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useDropzone } from "react-dropzone";
+import "components/componentStyles.css";
 
 const baseStyle = {
   flex: 1,
@@ -29,9 +30,24 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
-function FileDropZone(props) {
-  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
-    useDropzone({ accept: { "file/*": [] } });
+function FileDropZone({ onDrop, accept, open }) {
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    accept,
+    onDrop,
+  });
+
+  const files = acceptedFiles.map((file) => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
 
   const style = useMemo(
     () => ({
@@ -48,7 +64,13 @@ function FileDropZone(props) {
       <div {...getRootProps({ style })}>
         <input {...getInputProps()} />
         <p>Drag 'n' drop some files here, or click to select files</p>
+        <button type="button" onClick={open} className="file-zone-btn">
+          Click to select file
+        </button>
       </div>
+      <aside>
+        <ul>{files}</ul>
+      </aside>
     </div>
   );
 }

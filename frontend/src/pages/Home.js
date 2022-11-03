@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import PageLinkBtn from "components/PageLinkBtn";
 import FileDropZone from "components/FileDropZone";
 import "pages/pageStyles.css";
 
 const Home = () => {
-  const [files, setFiles] = React.useState(null);
+  const [file, setFile] = useState(null);
+  const onDrop = useCallback((acceptedFiles) => {
+    console.log("in on drop");
+    acceptedFiles.map((file) => {
+      console.log("In");
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        setFile(e.target.result);
+        console.log("loaded");
+        console.dir(e.target);
+      };
+      reader.readAsDataURL(file);
+      return file;
+    });
+  }, []);
 
   return (
     <section className="home">
@@ -19,7 +33,7 @@ const Home = () => {
         random abbreviation🫡
       </h3>
       <PageLinkBtn pageName="User Guide" pageLink="/guide" />
-      <FileDropZone />
+      <FileDropZone onDrop={onDrop} accept={"application/pdf"} />
     </section>
   );
 };

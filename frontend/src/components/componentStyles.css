@@ -38,3 +38,19 @@
     min-width: 150px;
   }
 }
+
+.file-zone-btn {
+  border: none;
+  text-align: center;
+  background-color: rgb(218, 216, 216);
+  height: 50px;
+  border-radius: 12px;
+  color: black;
+  font-weight: bold;
+  transition-duration: 0.6s;
+}
+
+.file-zone-btn:hover {
+  background-color: blue;
+  color: aliceblue;
+}
