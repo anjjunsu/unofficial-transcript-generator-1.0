@@ -4,17 +4,39 @@ import FileDropZone from "components/FileDropZone";
 import "pages/pageStyles.css";
 
 const Home = () => {
-  const [file, setFile] = useState(null);
+  const url = "http://localhost:8000";
+  const [file, setFile] = useState();
+  const [isFilePicked, setIsFilePicked] = useState(false);
+
+  const handleFileSubmission = (event) => {
+    const formData = new FormData();
+
+    formData.append("File", file);
+
+    fetch(url, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        console.dir("response");
+        console.dir(response.json());
+      })
+      .then((result) => {
+        console.dir("result");
+        console.dir(result);
+      });
+  };
+
   const onDrop = useCallback((acceptedFiles) => {
-    console.log("in on drop");
     acceptedFiles.map((file) => {
-      console.log("In");
       const reader = new FileReader();
+
       reader.onload = function (e) {
         setFile(e.target.result);
-        console.log("loaded");
-        console.dir(e.target);
+        console.dir(file);
+        setIsFilePicked(true);
       };
+
       reader.readAsDataURL(file);
       return file;
     });
@@ -34,6 +56,9 @@ const Home = () => {
       </h3>
       <PageLinkBtn pageName="User Guide" pageLink="/guide" />
       <FileDropZone onDrop={onDrop} accept={"application/pdf"} />
+      <button className="submit-btn" onClick={handleFileSubmission}>
+        Submit
+      </button>
     </section>
   );
 };
