@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+import PyPDF2
 
 app = FastAPI()
 
@@ -22,4 +23,12 @@ def home():
 
 @app.post("/upload/file")
 async def get_data(file: UploadFile = File(...)):
+    print(file.filename)
+    print(file.content_type)
+    print(type( file.file ))
+    pdf = PyPDF2.PdfFileReader(file.file)
+    print( pdf.documentInfo )
+    print( pdf.numPages )
+    print( "=== Let the page begin!!! ===" )
+    print(pdf.getPage(0).extract_text )
     return { "file_name": file.filename }

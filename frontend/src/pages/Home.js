@@ -13,18 +13,16 @@ const Home = () => {
 
     formData.append("file", file);
     formData.append("type", "application/pdf");
+
+    console.dir(formData);
+    // Post request to fastapi server to upload file
     const response = await fetch(url, {
       method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
       body: formData,
-    }).then((result) => {
-      console.dir("result");
-      console.dir(result);
+    }).then((response) => {
+      response.json();
+      console.log(response);
     });
-    console.log(response);
   };
 
   const onDrop = useCallback((acceptedFiles) => {
