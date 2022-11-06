@@ -49,16 +49,18 @@ const Home = () => {
 
   return (
     <section className="home">
-      <h1>Unofficial Transcript Generator</h1>
-      <h2>Upload your UBC SSC grade summary here</h2>
-      <h2>
-        Then this generator will parse your grade summary to good looking
-        unofficial transcript with full course name
-      </h2>
-      <h3>
-        So that reader can understand what you actually studied instead of some
-        random abbreviation🫡
-      </h3>
+      <div className="description">
+        <h1>Unofficial Transcript Generator</h1>
+        <h2>Upload your UBC SSC grade summary here</h2>
+        <h2>
+          Then this generator will parse your grade summary to good looking
+          unofficial transcript with full course name
+        </h2>
+        <h3>
+          So that reader can understand what you actually studied instead of
+          some random abbreviation🫡
+        </h3>
+      </div>
       <section className="total-saved">
         <p className="total-saved-text">Total Student Money Saved:</p>
         <p className="total-saved-dollar">${totalDollarSaved}</p>
