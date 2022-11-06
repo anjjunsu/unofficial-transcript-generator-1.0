@@ -1,7 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-
-from database import Base
+from .database import Base
 
 
 class Course(Base):
@@ -17,5 +16,5 @@ class SystemSettings(Base):
     __tablename__ = "system_settings"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     value = Column(Integer)
