@@ -30,7 +30,7 @@ const rejectStyle = {
   borderColor: "#ff1744",
 };
 
-function FileDropZone({ onDrop, accept, open }) {
+function FileDropZone({ onDrop, open }) {
   const {
     acceptedFiles,
     getRootProps,
@@ -39,8 +39,10 @@ function FileDropZone({ onDrop, accept, open }) {
     isDragAccept,
     isDragReject,
   } = useDropzone({
-    accept,
     onDrop,
+    accept: {
+      "application/pdf": [],
+    },
   });
 
   const files = acceptedFiles.map((file) => (

@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useState } from "react";
+import { Document, Page } from "react-pdf";
 import PageLinkBtn from "components/PageLinkBtn";
 import FileDropZone from "components/FileDropZone";
 import "pages/pageStyles.css";
@@ -7,7 +8,7 @@ const Home = () => {
   const fileUploadUrl = "http://localhost:8000/upload/file";
   const getTotalDollarUrl = "http://localhost:8000/total-requests";
   const [totalDollarSaved, setTotalDollarSaved] = useState("");
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(null);
   const [isFilePicked, setIsFilePicked] = useState(false);
 
   useEffect(() => {
@@ -38,12 +39,12 @@ const Home = () => {
   };
 
   const onDrop = useCallback((acceptedFiles) => {
-    const file = acceptedFiles[0];
-    console.dir(file);
-    setFile(file);
+    const currFile = acceptedFiles[0]; // Allow only one file upload
+    console.dir(currFile);
+    setFile(currFile);
     setIsFilePicked(true);
 
-    return file;
+    return currFile;
   }, []);
 
   return (
@@ -63,7 +64,14 @@ const Home = () => {
         <p className="total-saved-dollar">${totalDollarSaved}</p>
       </section>
       <PageLinkBtn pageName="User Guide" pageLink="/guide" />
-      <FileDropZone onDrop={onDrop} accept={"application/pdf"} />
+      <div className="preview">
+        {file != null && (
+          <Document file={file} options={{ workerSrc: "pdf.worker.js" }}>
+            <Page pageNumber={1} />
+          </Document>
+        )}
+      </div>
+      <FileDropZone onDrop={onDrop} />
       <button className="submit-btn" onClick={handleFileSubmission}>
         Submit
       </button>
