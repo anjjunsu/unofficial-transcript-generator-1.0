@@ -62,7 +62,7 @@ const Home = () => {
         </h3>
       </div>
       <section className="total-saved">
-        <p className="total-saved-text">Total Student Money Saved:</p>
+        <p className="total-saved-text">💵Total Student Money Saved:</p>
         <p className="total-saved-dollar">${totalDollarSaved}</p>
       </section>
       <PageLinkBtn pageName="User Guide" pageLink="/guide" />

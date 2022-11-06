@@ -13,16 +13,62 @@
 
 .total-saved {
   display: flex;
+  align-items: center;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
+  border-radius: 25px;
+  padding: 5px 20px;
+  font-size: larger;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .total-saved-text {
   padding: 5px;
+  font-weight: bold;
 }
 
 .total-saved-dollar {
   padding: 5px;
+  color: green;
+  font-weight: bolder;
+  font-size: larger;
 }
 
 .description {
   text-align: center;
+}
+
+.submit-btn {
+  background-color: #002145;
+  border-radius: 10px;
+  border: 0;
+  box-shadow: rgba(1, 60, 136, 0.5) 0 -1px 3px 0 inset,
+    rgba(0, 44, 97, 0.1) 0 3px 6px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Space Grotesk", -apple-system, system-ui, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  margin: 0;
+  min-height: 56px;
+  min-width: 120px;
+  padding: 16px 20px;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  transition: all 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.submit-btn:hover {
+  background-color: blue;
+  color: aliceblue;
 }
