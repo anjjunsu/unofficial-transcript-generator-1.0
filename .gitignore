@@ -32,3 +32,7 @@
 
 # pycache
 /backend/src/__pycache__
+
+# DB
+/backend/src/db_app/database.py
+/backend/.idea

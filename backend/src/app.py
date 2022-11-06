@@ -1,8 +1,5 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from PIL import Image
-import pytesseract
-from pdf2image import convert_from_bytes
 from file_master import handle_uploaded_file
 
 app = FastAPI()
