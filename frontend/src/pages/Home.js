@@ -1,12 +1,24 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import PageLinkBtn from "components/PageLinkBtn";
 import FileDropZone from "components/FileDropZone";
 import "pages/pageStyles.css";
 
 const Home = () => {
-  const url = "http://localhost:8000/upload/file";
+  const fileUploadUrl = "http://localhost:8000/upload/file";
+  const getTotalDollarUrl = "http://localhost:8000/total-requests";
+  const [totalDollarSaved, setTotalDollarSaved] = useState("");
   const [file, setFile] = useState();
   const [isFilePicked, setIsFilePicked] = useState(false);
+
+  useEffect(() => {
+    const getTD = async () => {
+      const response = await fetch(getTotalDollarUrl);
+      const td = await response.json();
+      console.log(td);
+      setTotalDollarSaved(td);
+    };
+    getTD();
+  }, []);
 
   const handleFileSubmission = async (event) => {
     const formData = new FormData();
@@ -16,7 +28,7 @@ const Home = () => {
 
     console.dir(formData);
     // Post request to fastapi server to upload file
-    const response = await fetch(url, {
+    const response = await fetch(fileUploadUrl, {
       method: "POST",
       body: formData,
     }).then((response) => {
@@ -46,6 +58,10 @@ const Home = () => {
         So that reader can understand what you actually studied instead of some
         random abbreviation🫡
       </h3>
+      <section className="total-saved">
+        <p className="total-saved-text">Total Student Money Saved:</p>
+        <p className="total-saved-dollar">${totalDollarSaved}</p>
+      </section>
       <PageLinkBtn pageName="User Guide" pageLink="/guide" />
       <FileDropZone onDrop={onDrop} accept={"application/pdf"} />
       <button className="submit-btn" onClick={handleFileSubmission}>

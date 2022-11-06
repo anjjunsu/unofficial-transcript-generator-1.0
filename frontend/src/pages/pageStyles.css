@@ -10,3 +10,15 @@
 .home h1 {
   font-size: 2.5rem;
 }
+
+.total-saved {
+  display: flex;
+}
+
+.total-saved-text {
+  padding: 5px;
+}
+
+.total-saved-dollar {
+  padding: 5px;
+}
