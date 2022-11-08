@@ -5,6 +5,10 @@ from sqlalchemy.orm import Session
 from db_app.database import SessionLocal, engine
 from db_app import models, crud
 
+# Remove
+from course_record import CourseRecord
+from transcript import Transcript
+
 OFFICIAL_TRANSCRIPT_FEE: float = 11.56
 
 app = FastAPI()
@@ -36,8 +40,18 @@ def get_db():
 
 @app.get("/total-requests")
 def read_total_requets(db: Session = Depends(get_db)):
+    # remove
+    test_course_obj = CourseRecord()
+    test_course_obj2 = CourseRecord()
+    print(test_course_obj)
+    test_trascript = Transcript()
+    test_trascript.course_record_list.append(test_course_obj)
+    test_trascript.course_record_list.append(test_course_obj2)
+    print(test_trascript)
+
     total_dollar_savings: float = crud.get_total_requests(
         db) * OFFICIAL_TRANSCRIPT_FEE
+
     return f"{total_dollar_savings:,.2f}"
 
 
