@@ -27,3 +27,9 @@ def increment_total_requests(db: Session):
         db.add(instance)
 
     db.commit()
+
+
+def insert_course_info(db: Session, code: str, name: str):
+    db_course = models.Course(code=code, name=name, deleted=False)
+    db.add(db_course)
+    db.commit()
