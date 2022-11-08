@@ -30,6 +30,13 @@ def increment_total_requests(db: Session):
 
 
 def insert_course_info(db: Session, code: str, name: str):
-    db_course = models.Course(code=code, name=name, deleted=False)
-    db.add(db_course)
-    db.commit()
+    instance = db.query(models.Course).with_for_update(
+        of=models.Course).filter(models.Course.code == code).first()
+
+    if not instance:
+        db_course = models.Course(code=code, name=name, deleted=False)
+        db.add(db_course)
+        db.commit()
+        print(f"[Info] New coure {code}: {name} is added to courses table\n")
+    else:
+        print(f"[Info] Coure {code}: {name} already exists in courses table\n")

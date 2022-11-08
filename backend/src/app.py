@@ -48,7 +48,8 @@ def read_total_requets(db: Session = Depends(get_db)):
     test_trascript.course_record_list.append(test_course_obj)
     test_trascript.course_record_list.append(test_course_obj2)
     print(test_trascript)
-    crud.insert_course_info(db, "CPEN 212", "Computing Systems Ⅱ")
+    crud.insert_course_info(
+        db, "CPSC 221", "Basic Algorithms and Data Structures")
 
     total_dollar_savings: float = crud.get_total_requests(
         db) * OFFICIAL_TRANSCRIPT_FEE
