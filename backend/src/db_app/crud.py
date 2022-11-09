@@ -51,6 +51,9 @@ def get_course_name(db: Session, code: str) -> str:
         return instance.name
     else:
         course_name = api_app.fetch_course_info_request(code)
+        print("+++++")
+        print(course_name)
+        print("+++++")
         if course_name:
             insert_course_info(db, code, course_name)
             return course_name

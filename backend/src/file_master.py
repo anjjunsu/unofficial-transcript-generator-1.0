@@ -72,7 +72,6 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)):
         # remove
         match num_data:
             case 11:
-                print("Completed course")
                 course_record = handle_completed_coures(db=db, record=data)
             case 9:
                 continue
@@ -93,10 +92,25 @@ def handle_completed_coures(db: Session, record: str) -> CourseRecord:
     entries = record.strip().split(" ")
 
     # Combine of first and the second entry is the course code
-    course_record.course_code = entries[0] + " " + entries[1]
-    course_record.course_name = crud.get_course_name(
-        db, course_record.course_code)
+    course_record.code = entries[0] + " " + entries[1]
+    course_record.name = crud.get_course_name(
+        db, course_record.code)
     course_record.section = entries[2]
+    course_record.grade = entries[3]
+
+    letter = entries[4]
+    if len(letter) > 1 and letter[1] != "+":
+        letter = letter[0] + "+"
+    course_record.letter_grade = letter
+
+    course_record.session = entries[5]
+    course_record.term = entries[6]
+    course_record.program = entries[7]
+    course_record.year = entries[8]
+    course_record.credits = entries[9]
+    course_record.class_average = entries[10]
+
+    return course_record
 
 
 def handle_in_progress_coures(record: str) -> CourseRecord:
