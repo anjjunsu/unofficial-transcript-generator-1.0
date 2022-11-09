@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from . import models
+import api_app
 
 
 def get_total_requests(db: Session) -> float:
@@ -40,3 +41,16 @@ def insert_course_info(db: Session, code: str, name: str):
         print(f"[Info] New coure {code}: {name} is added to courses table\n")
     else:
         print(f"[Info] Coure {code}: {name} already exists in courses table\n")
+
+
+def get_course_name(db: Session, code: str) -> str:
+    instance = db.query(models.Course).filter(
+        models.Course.code == code).first()
+
+    if instance:
+        return instance.name
+    else:
+        course_name = api_app.fetch_course_info_request(code)
+        if course_name:
+            insert_course_info(db, code, course_name)
+            return course_name
