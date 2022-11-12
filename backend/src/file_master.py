@@ -53,30 +53,18 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)):
             continue
         # If "Name:" is found, then the get substring after "Name:" to "."
         if "Name:" in data or "#:" in data:
-            full_name = data.split("Name:")[1].split(".")[0].strip()
-            # get surname and given name from full name
-            transcript.student_surname = full_name.split(",")[0].strip()
-            transcript.student_given_name = full_name.split(",")[1].strip()
-            print(f"[Info] student surname: { transcript.student_surname }")
-            print(
-                f"[Info] student given name: { transcript.student_given_name }")
-
-            transcript.student_number = data.split(
-                "#:")[1].strip().split(" ")[0].strip()
-            print(f"[Info] student number: { transcript.student_number }")
-
+            handle_personal_info(data=data, transcript=transcript)
             continue
 
         num_data: int = len(data.strip().split(" "))
         course_record: CourseRecord
-        # remove
         match num_data:
             case 11:
                 course_record = handle_completed_coures(db=db, record=data)
             case 9:
-                continue
+                course_record = handle_pass_fail_course(db=db, record=data)
             case 7:
-                continue
+                course_record = handle_in_progress_coures(db=db, record=data)
             case _:
                 continue
 
@@ -84,6 +72,20 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)):
             transcript.course_record_list.append(course_record)
 
     print(transcript)
+
+
+def handle_personal_info(data: str, transcript: Transcript):
+    full_name = data.split("Name:")[1].split(".")[0].strip()
+    # get surname and given name from full name
+    transcript.student_surname = full_name.split(",")[0].strip()
+    transcript.student_given_name = full_name.split(",")[1].strip()
+    print(f"[Info] student surname: { transcript.student_surname }")
+    print(
+        f"[Info] student given name: { transcript.student_given_name }")
+
+    transcript.student_number = data.split(
+        "#:")[1].strip().split(" ")[0].strip()
+    print(f"[Info] student number: { transcript.student_number }")
 
 
 def handle_completed_coures(db: Session, record: str) -> CourseRecord:
@@ -113,5 +115,34 @@ def handle_completed_coures(db: Session, record: str) -> CourseRecord:
     return course_record
 
 
-def handle_in_progress_coures(record: str) -> CourseRecord:
-    pass
+def handle_pass_fail_course(db: Session, record: str) -> CourseRecord:
+    course_record = CourseRecord()
+
+    entries = record.strip().split(" ")
+
+    course_record.code = entries[0] + " " + entries[1]
+    course_record.name = crud.get_course_name(db, course_record.code)
+    course_record.section = entries[2]
+    course_record.session = entries[3]
+    course_record.program = entries[4]
+    course_record.year = entries[5]
+    course_record.credits = entries[7]
+    course_record.grade = entries[8]
+
+    return course_record
+
+
+def handle_in_progress_coures(db: Session, record: str) -> CourseRecord:
+    course_record = CourseRecord()
+
+    entries = record.strip().split(" ")
+
+    course_record.code = entries[0] + " " + entries[1]
+    course_record.name = crud.get_course_name(db, course_record.code)
+    course_record.section = entries[2]
+    course_record.session = entries[3]
+    course_record.term = entries[4]
+    course_record.program = entries[5]
+    course_record.year = entries[6]
+
+    return course_record

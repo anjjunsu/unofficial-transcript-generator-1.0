@@ -1,21 +1,21 @@
 class CourseRecord:
     def __init__(self) -> None:
-        self.code: str = "N/A"
-        self.name: str = "N/A"
-        self.section: str = "N/A"
-        self.grade: str = "N/A"
-        self.letter_grade: str = "N/A"
-        self.session: str = "N/A"
-        self.term: str = "N/A"
-        self.program: str = "N/A"
-        self.year: str = "N/A"
-        self.credits: str = "N/A"
-        self.class_average: str = "N/A"
+        self.code: str = ""
+        self.name: str = ""
+        self.section: str = ""
+        self.grade: str = ""
+        self.letter_grade: str = ""
+        self.session: str = ""
+        self.term: str = ""
+        self.program: str = ""
+        self.year: str = ""
+        self.credits: str = ""
+        self.class_average: str = ""
 
     def __str__(self) -> str:
         s: str = "-----------------------------------------------------\n" \
-            + f"| code: {self.code} | name: {self.name} |section: {self.section} |" \
-            + f"grade: {self.grade} | letter grade: {self.letter_grade} |" \
+            + f"| code: {self.code} | name: {self.name} |section: {self.section} | " \
+            + f"grade: {self.grade} | letter grade: {self.letter_grade} | " \
             + f"session: {self.session} | term: {self.term} | " \
             + f"program: {self.program} | year: {self.year} | " \
             + f"credits: {self.credits} | class average: {self.class_average} |\n" \
