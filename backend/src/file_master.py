@@ -1,5 +1,7 @@
 import re
+from fastapi import Response
 from db_app import crud
+from pdf_writer import generate_transcript_pdf
 from sqlalchemy.orm import Session
 from typing import List
 from transcript import Transcript
@@ -8,9 +10,10 @@ from fastapi import UploadFile, File
 from PIL import Image
 import pytesseract
 from pdf2image import convert_from_bytes
+import pdf_writer
 
 
-async def handle_uploaded_file(db: Session, file: UploadFile = File(...)):
+async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Response:
     tesseract_path = "/opt/homebrew/bin/tesseract"
     pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
@@ -72,6 +75,8 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)):
             transcript.course_record_list.append(course_record)
 
     print(transcript)
+
+    return generate_transcript_pdf(transcript)
 
 
 def handle_personal_info(data: str, transcript: Transcript):
