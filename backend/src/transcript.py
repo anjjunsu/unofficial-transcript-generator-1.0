@@ -29,4 +29,7 @@ class Transcript:
         return s
 
     def sort_course_records_by_session(self) -> None:
-        self.course_record_list.sort(key=lambda x: (x.year, -x.term))
+        # Sort course list by session
+        # Lower session number comes first, and 'S' comes first and 'W' comes last
+        # Then, sort by term
+        self.course_record_list.sort()
