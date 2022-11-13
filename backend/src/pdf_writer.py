@@ -7,6 +7,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.fonts import addMapping
+from reportlab.lib.pagesizes import A4
 
 from fastapi import Response
 
@@ -27,7 +28,7 @@ def generate_transcript_pdf(transcript: Transcript):
     addMapping('Times New Roman', 1, 0, 'Times New Roman Bold')
     addMapping('Times New Roman', 1, 1, 'Times New Roman Bold Italic')
 
-    canvas = Canvas(file_name)
+    canvas = Canvas(file_name, pagesize=A4)
     canvas.setFont('Times New Roman', 12)
 
     canvas.drawString(100, 100, "Hello World")
