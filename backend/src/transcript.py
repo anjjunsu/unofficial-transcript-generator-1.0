@@ -17,7 +17,7 @@ class Transcript:
         s: str = "=======================================\n" \
             + f"=== Transcript ===\n" \
             + f"{self.school_name}\n" \
-            + f"Surname: {self.school_name}, Given name: {self.student_given_name}\n" \
+            + f"Surname: {self.student_surname}, Given name: {self.student_given_name}\n" \
             + f"Student #: {self.student_number}\n" \
             + f"Today: {self.today}\n" \
 

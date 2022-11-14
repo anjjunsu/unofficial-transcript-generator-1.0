@@ -74,16 +74,27 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
         if course_record:
             transcript.course_record_list.append(course_record)
 
+    transcript.sort_course_records_by_session()
     print(transcript)
 
     return generate_transcript_pdf(transcript)
 
 
 def handle_personal_info(data: str, transcript: Transcript):
-    full_name = data.split("Name:")[1].split(".")[0].strip()
+
+    print(f"[Info] Handle personal info: {data}")
+
+    full_name = data.split("Name:")[1].split("#")[0].strip()
+
     # get surname and given name from full name
-    transcript.student_surname = full_name.split(",")[0].strip()
-    transcript.student_given_name = full_name.split(",")[1].strip()
+    surname: str = full_name.split(",")[0].strip()
+    surname = re.sub("[^a-zA-Z]+", "", surname)
+    transcript.student_surname = surname
+
+    given_name: str = full_name.split(",")[1].strip()
+    given_name = re.sub("[^a-zA-Z]+", "", given_name)
+    transcript.student_given_name = given_name
+
     print(f"[Info] student surname: { transcript.student_surname }")
     print(
         f"[Info] student given name: { transcript.student_given_name }")
