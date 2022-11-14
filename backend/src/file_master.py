@@ -10,11 +10,11 @@ from fastapi import UploadFile, File
 from PIL import Image
 import pytesseract
 from pdf2image import convert_from_bytes
-import pdf_writer
 
 
 async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Response:
-    tesseract_path = "/opt/homebrew/bin/tesseract"
+    # tesseract_path= "/usr/bin/tesseract"  # Cloud VM dev env path
+    tesseract_path = "/opt/homebrew/bin/tesseract"  # Mac dev env path
     pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
     print("[Info] ====== File Meta Info Start =====")
