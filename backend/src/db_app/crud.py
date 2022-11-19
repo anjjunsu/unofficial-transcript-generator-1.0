@@ -11,7 +11,7 @@ def get_total_requests(db: Session) -> float:
         db.commit()
         return instance.value
     else:
-        instance = models.SystemSettings(id="TOTAL_REQUESTS", value=0)
+        instance = models.SystemSettings(name="TOTAL_REQUESTS", value=0)
         db.add(instance)
         db.commit()
         return instance.value
