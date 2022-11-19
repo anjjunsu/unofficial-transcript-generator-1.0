@@ -12,6 +12,7 @@ const Home = () => {
   const [file, setFile] = useState(null);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [waiting, setWaiting] = useState(false);
+  const [responseReceived, setResponseReceived] = useState(false);
 
   useEffect(() => {
     const getTD = async () => {
@@ -40,7 +41,12 @@ const Home = () => {
       console.log(response);
 
       setWaiting(false);
+      setResponseReceived(true);
     });
+  };
+
+  const handleReDo = () => {
+    setResponseReceived(false);
   };
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -70,23 +76,30 @@ const Home = () => {
         <p className="total-saved-text">💵Total Student Money Saved:</p>
         <p className="total-saved-dollar">${totalDollarSaved}</p>
       </section>
-      {!waiting && (
-        <>
-          <PageLinkBtn pageName="User Guide" pageLink="/guide" />
-          <div className="preview">
-            {file != null && (
-              <Document file={file} options={{ workerSrc: "pdf.worker.js" }}>
-                <Page pageNumber={1} />
-              </Document>
-            )}
-          </div>
-          <FileDropZone onDrop={onDrop} />
-          <button className="submit-btn" onClick={handleFileSubmission}>
-            Submit
+      <section className="main">
+        {!waiting && !responseReceived && (
+          <>
+            <PageLinkBtn pageName="User Guide" pageLink="/guide" />
+            <div className="preview">
+              {file != null && (
+                <Document file={file} options={{ workerSrc: "pdf.worker.js" }}>
+                  <Page pageNumber={1} />
+                </Document>
+              )}
+            </div>
+            <FileDropZone onDrop={onDrop} />
+            <button className="submit-btn" onClick={handleFileSubmission}>
+              Submit
+            </button>
+          </>
+        )}
+        {waiting && <GridLoader color="#002145" />}
+        {responseReceived && (
+          <button className="submit-btn" onClick={handleReDo}>
+            🔄 Re-do
           </button>
-        </>
-      )}
-      {waiting && <GridLoader color="#002145" />}
+        )}
+      </section>
     </section>
   );
 };
