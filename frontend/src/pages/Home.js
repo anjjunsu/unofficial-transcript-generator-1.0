@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import { Document, Page } from "react-pdf";
 import PageLinkBtn from "components/PageLinkBtn";
 import FileDropZone from "components/FileDropZone";
+import { GridLoader } from "react-spinners";
 import "pages/pageStyles.css";
 
 const Home = () => {
@@ -10,6 +11,7 @@ const Home = () => {
   const [totalDollarSaved, setTotalDollarSaved] = useState("");
   const [file, setFile] = useState(null);
   const [isFilePicked, setIsFilePicked] = useState(false);
+  const [waiting, setWaiting] = useState(false);
 
   useEffect(() => {
     const getTD = async () => {
@@ -22,6 +24,7 @@ const Home = () => {
   }, []);
 
   const handleFileSubmission = async (event) => {
+    setWaiting(true);
     const formData = new FormData();
 
     formData.append("file", file);
@@ -35,6 +38,8 @@ const Home = () => {
     }).then((response) => {
       response.json();
       console.log(response);
+
+      setWaiting(false);
     });
   };
 
@@ -65,18 +70,23 @@ const Home = () => {
         <p className="total-saved-text">💵Total Student Money Saved:</p>
         <p className="total-saved-dollar">${totalDollarSaved}</p>
       </section>
-      <PageLinkBtn pageName="User Guide" pageLink="/guide" />
-      <div className="preview">
-        {file != null && (
-          <Document file={file} options={{ workerSrc: "pdf.worker.js" }}>
-            <Page pageNumber={1} />
-          </Document>
-        )}
-      </div>
-      <FileDropZone onDrop={onDrop} />
-      <button className="submit-btn" onClick={handleFileSubmission}>
-        Submit
-      </button>
+      {!waiting && (
+        <>
+          <PageLinkBtn pageName="User Guide" pageLink="/guide" />
+          <div className="preview">
+            {file != null && (
+              <Document file={file} options={{ workerSrc: "pdf.worker.js" }}>
+                <Page pageNumber={1} />
+              </Document>
+            )}
+          </div>
+          <FileDropZone onDrop={onDrop} />
+          <button className="submit-btn" onClick={handleFileSubmission}>
+            Submit
+          </button>
+        </>
+      )}
+      {waiting && <GridLoader color="#002145" />}
     </section>
   );
 };
