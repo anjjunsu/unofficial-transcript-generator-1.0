@@ -10,6 +10,7 @@ const Home = () => {
   const getTotalDollarUrl = "http://localhost:8000/total-requests";
   const [totalDollarSaved, setTotalDollarSaved] = useState("");
   const [file, setFile] = useState(null);
+  const [numPages, setNumPages] = useState(null);
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [responseReceived, setResponseReceived] = useState(false);
@@ -82,14 +83,22 @@ const Home = () => {
             <PageLinkBtn pageName="User Guide" pageLink="/guide" />
             <div className="preview">
               {file != null && (
-                <Document file={file} options={{ workerSrc: "pdf.worker.js" }}>
-                  <Page pageNumber={1} />
+                <Document
+                  file={file}
+                  options={{ workerSrc: "pdf.worker.js" }}
+                  onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+                >
+                  {Array.apply(null, Array(numPages))
+                    .map((x, i) => i + 1)
+                    .map((page) => (
+                      <Page pageNumber={page} />
+                    ))}
                 </Document>
               )}
             </div>
             <FileDropZone onDrop={onDrop} />
             <button className="submit-btn" onClick={handleFileSubmission}>
-              Submit
+              🚀 Submit
             </button>
           </>
         )}

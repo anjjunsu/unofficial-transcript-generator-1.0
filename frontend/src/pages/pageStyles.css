@@ -19,6 +19,14 @@
   padding: 10px;
 }
 
+.preview {
+  padding: auto;
+  margin: 10px;
+  border: 1px;
+  border-color: black;
+  border-style: solid;
+}
+
 .total-saved {
   display: flex;
   align-items: center;
