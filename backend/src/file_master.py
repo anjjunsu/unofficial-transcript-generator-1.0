@@ -8,7 +8,7 @@ from typing import List
 from transcript import Transcript
 from course_record import CourseRecord
 from fastapi import UploadFile, File
-from PIL import Image
+from PIL import Image, ImageOps
 import pytesseract
 from pdf2image import convert_from_bytes
 
@@ -33,6 +33,7 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
         imgs = convert_from_bytes(bytes)
     # elif "image" in file_type:
     #    imgs.append(Image.open(file.file))
+
     else:
         #! TODO: Raise error, return 4xx response
         logging.warning("Invalid file type. Current file type: %s", type(imgs))
@@ -40,6 +41,7 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
     logging.warning("Image has been opened")
 
     for img in imgs:
+        ImageOps.grayscale(img)    # Grey scale PIL image for better OCR result
         data += pytesseract.image_to_string(img)
 
     data_list = data.splitlines()
