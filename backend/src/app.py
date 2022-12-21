@@ -1,3 +1,4 @@
+import logging
 from file_master import handle_uploaded_file
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends, FastAPI, UploadFile, File
@@ -9,6 +10,10 @@ OFFICIAL_TRANSCRIPT_FEE: float = 11.56
 
 app = FastAPI()
 
+# Logger
+logging.basicConfig(filename='app.log', encoding='utf-8',
+                    level=logging.DEBUG, format='%(asctime)s %(message)s')
+logging.info("Server started")
 
 origins = [
     "http://localhost:3000",
