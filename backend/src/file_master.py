@@ -1,4 +1,5 @@
 import re
+import logging
 from fastapi import Response
 from db_app import crud
 from pdf_writer import generate_transcript_pdf
@@ -17,11 +18,8 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
     tesseract_path = "/opt/homebrew/bin/tesseract"  # Mac dev env path
     pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
-    print("[Info] ====== File Meta Info Start =====")
-    print(file.filename)
-    print(file.content_type)
-    print(type(file.file))
-    print("[Info] ====== File Meta Info End =====")
+    logging.info("[File Meta] File Name: %s | File Content Type: %s",
+                 file.filename, file.content_type)
 
     imgs = []
     data: str = ""
@@ -33,21 +31,16 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
     if "pdf" in file_type:
         bytes = file.file.read()
         imgs = convert_from_bytes(bytes)
-        print("+++++++++")
-        print(type(imgs))
     # elif "image" in file_type:
     #    imgs.append(Image.open(file.file))
     else:
         #! TODO: Raise error, return 4xx response
-        print("Invalid file type")
+        logging.warning("Invalid file type. Current file type: %s", type(imgs))
 
-    print("Opend image")
+    logging.warning("Image has been opened")
 
     for img in imgs:
         data += pytesseract.image_to_string(img)
-
-    # Remove
-    print(data)
 
     data_list = data.splitlines()
 
@@ -75,14 +68,14 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
             transcript.course_record_list.append(course_record)
 
     transcript.sort_course_records_by_session()
-    print(transcript)
+    logging.info(transcript)
 
     return generate_transcript_pdf(transcript)
 
 
 def handle_personal_info(data: str, transcript: Transcript):
 
-    print(f"[Info] Handle personal info: {data}")
+    logging.info("[Info] Handle personal info: %s", data)
 
     full_name = data.split("Name:")[1].split("#")[0].strip()
 
@@ -95,13 +88,10 @@ def handle_personal_info(data: str, transcript: Transcript):
     given_name = re.sub("[^a-zA-Z]+", "", given_name)
     transcript.student_given_name = given_name
 
-    print(f"[Info] student surname: { transcript.student_surname }")
-    print(
-        f"[Info] student given name: { transcript.student_given_name }")
-
     transcript.student_number = data.split(
         "#:")[1].strip().split(" ")[0].strip()
-    print(f"[Info] student number: { transcript.student_number }")
+    logging.info("Student Surname: %s, Given Name: %s, Student #: %s",
+                 transcript.student_surname, transcript.student_given_name, transcript.student_number)
 
 
 def handle_completed_coures(db: Session, record: str) -> CourseRecord:

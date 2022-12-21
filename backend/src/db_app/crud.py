@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from . import models
 import api_app
+import logging
 
 
 def get_total_requests(db: Session) -> float:
@@ -38,9 +39,12 @@ def insert_course_info(db: Session, code: str, name: str):
         db_course = models.Course(code=code, name=name, deleted=False)
         db.add(db_course)
         db.commit()
-        print(f"[Info] New coure {code}: {name} is added to courses table\n")
+        logging.info()
+        logging.info(
+            "[Info] New coure %s: %s is added to courses table", code, name)
     else:
-        print(f"[Info] Coure {code}: {name} already exists in courses table\n")
+        logging.info(
+            "[Info] New coure %s: %s is added to courses table", code, name)
 
 
 def get_course_name(db: Session, code: str) -> str:
@@ -51,9 +55,6 @@ def get_course_name(db: Session, code: str) -> str:
         return instance.name
     else:
         course_name = api_app.fetch_course_info_request(code)
-        print("+++++")
-        print(course_name)
-        print("+++++")
         if course_name:
             insert_course_info(db, code, course_name)
             return course_name

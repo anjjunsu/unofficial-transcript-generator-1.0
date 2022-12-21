@@ -1,4 +1,5 @@
 import os
+import logging
 from io import BytesIO
 from typing import Final
 
@@ -95,10 +96,10 @@ def generate_transcript_pdf(transcript: Transcript):
         onFirstPage=add_page_number,
         onLaterPages=add_page_number
     )
-    print(f"[Info] PDF file saved to {file_name}")
+    logging.info("PDF file saved to %s", file_name)
 
     # Close the buffer! Important!
-    # My cloud VM has the smallese RAM size I ever used so far.
+    # My cloud VM has the smallest RAM size I ever used so far.
     buffer.seek(0)
     pdf_bytes = buffer.getvalue()
     buffer.close()
