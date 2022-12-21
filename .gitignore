@@ -40,3 +40,6 @@
 
 # Logs
 **/*.log
+
+# PDFs
+**/*.pdf
