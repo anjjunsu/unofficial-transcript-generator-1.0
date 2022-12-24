@@ -1,3 +1,23 @@
+.general-text {
+  text-align: center;
+}
+
+.general-text ol {
+  display: inline-block;
+  text-align: left;
+}
+
+.general-text li {
+  padding-top: 10px;
+  width: 40rem;
+}
+
+.general-text img {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: inherit;
+}
+
 .home {
   display: flex;
   flex-direction: column;
