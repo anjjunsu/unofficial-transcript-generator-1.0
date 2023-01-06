@@ -24,8 +24,8 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
     # # Customize path depending on your system
     # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-    logging.info("[File Meta] File Name: %s | File Content Type: %s",
-                 file.filename, file.content_type)
+    # logging.info("[File Meta] File Name: %s | File Content Type: %s",
+    #              file.filename, file.content_type)
 
     imgs = []
     data: str = ""
@@ -114,9 +114,13 @@ def handle_completed_coures(db: Session, record: str) -> CourseRecord:
     course_record.section = entries[2]
     course_record.grade = entries[3]
 
+    # for cases where '+' gets read as 't'
+    # eg. "A+" is outputted as "At"
     letter = entries[4]
-    if len(letter) > 1 and letter[1] != "+":
-        letter = letter[0] + "+"
+
+    if len(letter) > 1 and letter[1].isalpha:
+        if letter[1] == 't': letter = letter[0] + "+"
+        else: logging.warning("Invalid Letter Grade for: %s", course_record.code)
     course_record.letter_grade = letter
 
     course_record.session = entries[5]
@@ -140,7 +144,7 @@ def handle_pass_fail_course(db: Session, record: str) -> CourseRecord:
     course_record.session = entries[3]
     course_record.program = entries[4]
     course_record.year = entries[5]
-    course_record.credits = "n/a" if entries[7][0] == 'n' else entries[7]
+    course_record.credits = entries[6]
     course_record.grade = entries[8]
 
     return course_record
