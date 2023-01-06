@@ -24,8 +24,8 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
     # # Customize path depending on your system
     # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-    # logging.info("[File Meta] File Name: %s | File Content Type: %s",
-    #              file.filename, file.content_type)
+    logging.info("[File Meta] File Name: %s | File Content Type: %s",
+                 file.filename, file.content_type)
 
     imgs = []
     data: str = ""
