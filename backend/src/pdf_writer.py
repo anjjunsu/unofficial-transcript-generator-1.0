@@ -1,17 +1,20 @@
 import os
 import logging
 from io import BytesIO
-from typing import Final
+from typing import Final, List
 
 from transcript import Transcript
+from course_record import CourseRecord
 
-from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle, Table, PageBreak
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.fonts import addMapping
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, LETTER
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+from reportlab.lib import colors
 
 from fastapi import Response
 
@@ -24,20 +27,55 @@ TAB: Final = '\u00A0\u00A0\u00A0\u00A0'
 SIX_TAB: Final = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0'
 
 
+def groupBySession(course_records: List[CourseRecord]) -> dict[str, List[List[str]]]:
+    name_style = getSampleStyleSheet()['Normal']
+    name_style.fontName = 'Times New Roman'
+    name_style.fontSize = 11
+    name_style.alignment = LEFT
+    sessions = {}
+    for course in course_records: 
+        data = [
+            course.term, 
+            course.code, 
+            Paragraph(course.name if course.name else course.code, name_style), 
+            course.grade, 
+            course.letter_grade, 
+            course.credits,
+            course.class_average
+            ]
+        if course.session not in sessions:
+            sessions[course.session] = [data]
+        else:
+            sessions[course.session].append(data)
+    return sessions
+
+
+def toExplicitSession(session: str) -> str:
+    
+    if session[4] == 'W':
+        year = int(session[0:4]) 
+        return "Winter Session " + str(year) + " - " + str(year+1)
+    elif session[4] == "S":
+        year = int(session[0:4]) 
+        return "Summer Session " + str(year)
+    else:
+        logging.warning("Invalid session info for: " + session)
+        return ""
+
+
 def generate_transcript_pdf(transcript: Transcript):
     # region PDF font registration
-    pdfmetrics.registerFont(TTFont('Times New Roman', 'Times New Roman.ttf'))
+    pdfmetrics.registerFont(TTFont('Times New Roman', 'times.ttf'))
     pdfmetrics.registerFont(
-        TTFont('Times New Roman Bold', 'Times New Roman Bold.ttf'))
-    pdfmetrics.registerFont(
-        TTFont('Times New Roman Italic', 'Times New Roman Italic.ttf'))
-    pdfmetrics.registerFont(
-        TTFont('Times New Roman Bold Italic', 'Times New Roman Bold Italic.ttf'))
-
+        TTFont('Times New Roman Bold', 'timesbd.ttf'))
+    #pdfmetrics.registerFont(
+    #    TTFont('Times New Roman Italic', 'Times New Roman Italic.ttf'))
+    #pdfmetrics.registerFont(
+    #    TTFont('Times New Roman Bold Italic', 'Times New Roman Bold Italic.ttf'))
     addMapping('Times New Roman', 0, 0, 'Times New Roman')
-    addMapping('Times New Roman', 0, 1, 'Times New Roman Italic')
+    #addMapping('Times New Roman', 0, 1, 'Times New Roman Italic')
     addMapping('Times New Roman', 1, 0, 'Times New Roman Bold')
-    addMapping('Times New Roman', 1, 1, 'Times New Roman Bold Italic')
+    #addMapping('Times New Roman', 1, 1, 'Times New Roman Bold Italic')
     # endregion
 
     file_name = f"UBCTranscript_{transcript.student_surname},{transcript.student_given_name}_{transcript.student_number}.pdf"
@@ -46,7 +84,7 @@ def generate_transcript_pdf(transcript: Transcript):
     #! Replace with buffer: for testing
     pdf = SimpleDocTemplate(
         filename=file_name,
-        pagesize=A4,
+        pagesize=LETTER,
         topMargin=10,
         leftMargin=10,
         rightMargin=10,
@@ -67,7 +105,7 @@ def generate_transcript_pdf(transcript: Transcript):
     style_sheet = getSampleStyleSheet()
 
     # region Title
-    heading1_text: str = "TRANSCRIPT OF ACADEMIC RECORD"
+    heading1_text: str = "TRANSCRIPT OF" +"<br/>" + "ACADEMIC RECORD"
     heading1_style = style_sheet['Heading1']
     heading1_style.fontName = 'Times New Roman Bold'
     heading1_style.fontWeight = 'bold'
@@ -78,16 +116,63 @@ def generate_transcript_pdf(transcript: Transcript):
 
     # region Student Info
 # "A <b>bold</b> word.<br /> An <i>italic</i> word."
+    logging.info("Printing Student Info")
     student_info_style = style_sheet['Normal']
     student_info_style.fontName = 'Times New Roman'
-    student_info_style.fontSize = 12
+    student_info_style.fontSize = 11
     student_info_style.alignment = MIDDLE
     student_info_text: str = "<b>Surname:</b>" + TWO_SPACE + transcript.student_surname + SIX_TAB \
         + "<b>Given Name:</b>" + TWO_SPACE + transcript.student_given_name + SIX_TAB \
-        + "<b>Student Number:</b>" + TWO_SPACE + transcript.student_number
+        + "<b>Student Number:</b>" + TWO_SPACE + transcript.student_number + "<br/> <br/>"
     student_info = Paragraph(student_info_text, student_info_style)
     flowables.append(student_info)
+    logging.info("Done Student Info")
     # endregion
+
+    # region Course Listing
+    inner_table_header = ["Term", "Course", "Course Title", "%\nGrade", "Letter\nGrade", "Credit\nRec'd", "Class\nAvg"]
+
+    inner_table_style = TableStyle(
+        [
+            ('FONT', (0,0), (6,0), 'Times New Roman Bold'),
+            ('FONT', (0,1), (-1,-1), 'Times New Roman'),
+            ('VALIGN', (0,0), (6,0), 'BOTTOM'),
+            ('VALIGN', (0,1), (-1,-1), 'TOP')
+        ]
+    )
+
+    table_style = TableStyle(
+        [
+            ('FONT', (0,0), (-1,0), 'Times New Roman Bold'),
+            ('FONT', (1,0), (-1,-1), 'Times New Roman'),
+            ('BACKGROUND', (0,0), (-1,0), colors.lightgrey),
+            ('BOX', (0,0), (-1,-1), 0.25, colors.black),
+        ]
+    )
+
+    logging.info("Parsing by course session")
+    coursesBySession = groupBySession(transcript.course_record_list)
+
+    logging.info("Printing Course Listing")
+    
+
+    for session in coursesBySession:
+        explicitSession = toExplicitSession(session)
+        course_data = coursesBySession[session]
+        course_data.insert(0,inner_table_header)
+        
+        
+        data_table = [
+            [explicitSession],
+            [Table(course_data, colWidths=(0.52*inch, 0.9*inch, 3.4*inch,0.52*inch,0.52*inch,0.52*inch,0.52*inch ), style=inner_table_style)]
+        ]
+
+        table = Table(data_table, colWidths=7*inch, style=table_style)
+
+        flowables.append(table)
+        
+    # endregion
+
 
     #! Remove: for testing
     # Save as file in disk

@@ -18,6 +18,12 @@ async def handle_uploaded_file(db: Session, file: UploadFile = File(...)) -> Res
     tesseract_path = "/opt/homebrew/bin/tesseract"  # Mac dev env path
     pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
+    #For Window Dev
+    # tesseract_path_local = "/c/Program Files/Tesseract-OCR"
+    # pytesseract.pytesseract.tesseract_cmd = tesseract_path_local
+    # # Customize path depending on your system
+    # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
     logging.info("[File Meta] File Name: %s | File Content Type: %s",
                  file.filename, file.content_type)
 
@@ -134,7 +140,7 @@ def handle_pass_fail_course(db: Session, record: str) -> CourseRecord:
     course_record.session = entries[3]
     course_record.program = entries[4]
     course_record.year = entries[5]
-    course_record.credits = entries[7]
+    course_record.credits = "n/a" if entries[7][0] == 'n' else entries[7]
     course_record.grade = entries[8]
 
     return course_record
