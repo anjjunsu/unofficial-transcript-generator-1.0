@@ -39,7 +39,6 @@ def insert_course_info(db: Session, code: str, name: str):
         db_course = models.Course(code=code, name=name, deleted=False)
         db.add(db_course)
         db.commit()
-        logging.info()
         logging.info(
             "[Info] New coure %s: %s is added to courses table", code, name)
     else:
